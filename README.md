@@ -232,6 +232,9 @@ cd ios
 
 
 ###### 交叉编译 ######
+https://github.com/kewlbear/x264-ios
+https://github.com/kewlbear/fdk-aac-build-script-for-iOS
+
 cd ios
 ./build-fdk-aac.sh arm64
 ./build-x264.sh arm64
