@@ -231,6 +231,30 @@ cd ios
 ###### 支持https ######
 
 
+###### 交叉编译 ######
+cd ios
+./build-fdk-aac.sh arm64
+./build-x264.sh arm64
+./compile-ffmpeg.sh clean
+./compile-ffmpeg.sh arm64
+
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-gpl"
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-version3"
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-nonfree"
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-libx264"
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-encoder=libx264"
+#export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-decoder=libx264"
+
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-libfdk-aac"
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-encoder=libfdk-aac"
+#export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-decoder=libfdk-aac"
+
+
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-hwaccels"
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --enable-videotoolbox"
+
+###### 交叉编译 ######
+
 # Demo
 #     open ios/IJKMediaDemo/IJKMediaDemo.xcodeproj with Xcode
 # 

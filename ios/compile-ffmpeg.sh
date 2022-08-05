@@ -79,6 +79,50 @@ do_lipo_ssl () {
     fi
 }
 
+X264_LIBS="libx264"
+do_lipo_x264() {
+    LIB_FILE=$1
+    LIPO_FLAGS=
+    for ARCH in $FF_ALL_ARCHS
+    do
+      ARCH_LIB_FILE="$UNI_BUILD_ROOT/build/x264-$ARCH/output/lib/$LIB_FILE"
+      if [ -f "$ARCH_LIB_FILE" ]; then
+          LIPO_FLAGS="$LIPO_FLAGS $ARCH_LIB_FILE"
+          cp -R $UNI_BUILD_ROOT/build/x264-$ARCH/output/include $UNI_BUILD_ROOT/build/universal/
+      else
+          echo "skip $LIB_FILE of $ARCH";
+      fi
+    done
+
+    if [ "$LIPO_FLAGS" != "" ]; then
+        xcrun lipo -create $LIPO_FLAGS -output $UNI_BUILD_ROOT/build/universal/lib/$LIB_FILE
+        xcrun lipo -info $UNI_BUILD_ROOT/build/universal/lib/$LIB_FILE
+    fi
+}
+
+
+FDKAAC_LIBS="libfdk-aac"
+do_lipo_fdk_aac() {
+    LIB_FILE=$1
+    LIPO_FLAGS=
+    for ARCH in $FF_ALL_ARCHS
+    do
+      ARCH_LIB_FILE="$UNI_BUILD_ROOT/build/fdk-aac-$ARCH/output/lib/$LIB_FILE"
+      if [ -f "$ARCH_LIB_FILE" ]; then
+          LIPO_FLAGS="$LIPO_FLAGS $ARCH_LIB_FILE"
+          cp -R $UNI_BUILD_ROOT/build/fdk-aac-$ARCH/output/include $UNI_BUILD_ROOT/build/universal/
+      else
+          echo "skip $LIB_FILE of $ARCH";
+      fi
+    done
+
+    if [ "$LIPO_FLAGS" != "" ]; then
+        xcrun lipo -create $LIPO_FLAGS -output $UNI_BUILD_ROOT/build/universal/lib/$LIB_FILE
+        xcrun lipo -info $UNI_BUILD_ROOT/build/universal/lib/$LIB_FILE
+    fi
+}
+
+
 do_lipo_all () {
     mkdir -p $UNI_BUILD_ROOT/build/universal/lib
     echo "lipo archs: $FF_ALL_ARCHS"
@@ -113,6 +157,17 @@ do_lipo_all () {
     for SSL_LIB in $SSL_LIBS
     do
         do_lipo_ssl "$SSL_LIB.a";
+    done
+
+    for X264_LIB in $X264_LIBS
+    do
+        do_lipo_x264 "$X264_LIB.a";
+    done
+
+
+    for FDKAAC_LIB in $FDKAAC_LIBS
+    do
+        do_lipo_fdk_aac "$FDKAAC_LIB.a";
     done
 }
 
@@ -150,7 +205,7 @@ elif [ "$FF_TARGET" = "clean" ]; then
     echo "clean build cache"
     echo "================="
     rm -rf build/ffmpeg-*
-    rm -rf build/openssl-*
+#    rm -rf build/openssl-*
     rm -rf build/universal/include
     rm -rf build/universal/lib
     echo "clean success"

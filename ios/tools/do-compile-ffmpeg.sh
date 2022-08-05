@@ -213,6 +213,52 @@ if [ -f "${FFMPEG_DEP_OPENSSL_LIB}/libssl.a" ]; then
     FFMPEG_DEP_LIBS="$FFMPEG_CFLAGS -L${FFMPEG_DEP_OPENSSL_LIB} -lssl -lcrypto"
 fi
 
+
+#--------------------
+echo "\n--------------------"
+echo "[*] check X264"
+echo "----------------------"
+FF_BUILD_NAME_X264=x264-arm64
+FFMPEG_DEP_X264_INC=$FF_BUILD_ROOT/build/$FF_BUILD_NAME_X264/output/include
+FFMPEG_DEP_X264_LIB=$FF_BUILD_ROOT/build/$FF_BUILD_NAME_X264/output/lib
+#--------------------
+# with x264
+if [ -f "${FFMPEG_DEP_X264_LIB}/libx264.a" ]; then
+    FFMPEG_CFG_FLAGS="$FFMPEG_CFG_FLAGS --enable-libx264"
+    FFMPEG_CFG_FLAGS="$FFMPEG_CFG_FLAGS --enable-encoder=libx264"
+
+    FFMPEG_CFLAGS="$FFMPEG_CFLAGS -I${FFMPEG_DEP_X264_INC}"
+    FFMPEG_DEP_LIBS="$FFMPEG_DEP_LIBS -L${FFMPEG_DEP_X264_LIB} -lx264"
+
+    export PKG_CONFIG_PATH="$FFMPEG_DEP_X264_LIB/pkgconfig":$PKG_CONFIG_PATH
+    echo $PKG_CONFIG_PATH
+fi
+
+
+
+#--------------------
+echo "\n--------------------"
+echo "[*] configurate fdk-aac"
+echo "--------------------"
+FF_BUILD_NAME_FDKAAC=fdk-aac-arm64
+FFMPEG_DEP_FDKAAC_INC=$FF_BUILD_ROOT/build/$FF_BUILD_NAME_FDKAAC/output/include
+FFMPEG_DEP_FDKAAC_LIB=$FF_BUILD_ROOT/build/$FF_BUILD_NAME_FDKAAC/output/lib
+#--------------------
+# with x264
+if [ -f "${FFMPEG_DEP_FDKAAC_LIB}/libfdk-aac.a" ]; then
+    FFMPEG_CFG_FLAGS="$FFMPEG_CFG_FLAGS --enable-libfdk-aac"
+    FFMPEG_CFG_FLAGS="$FFMPEG_CFG_FLAGS --enable-encoder=libfdk-aac"
+
+    FFMPEG_CFLAGS="$FFMPEG_CFLAGS -I${FFMPEG_DEP_FDKAAC_INC}"
+    FFMPEG_DEP_LIBS="$FFMPEG_DEP_LIBS -L${FFMPEG_DEP_FDKAAC_LIB} -lfdk-aac"
+
+    export PKG_CONFIG_PATH="$FFMPEG_DEP_FDKAAC_LIB/pkgconfig":$PKG_CONFIG_PATH
+    echo $PKG_CONFIG_PATH
+fi
+
+
+
+
 #--------------------
 echo "\n--------------------"
 echo "[*] configure"
